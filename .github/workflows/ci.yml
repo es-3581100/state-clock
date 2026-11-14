@@ -1,0 +1,17 @@
+name: Native C++ build and self-test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: make -j2
+      - name: Run invariant self-tests
+        run: make test
+      - name: Validate JSON CLI
+        run: ./build/nanoclock --json | python3 -m json.tool >/dev/null
